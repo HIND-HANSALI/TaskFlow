@@ -1,2 +1,4 @@
-package com.taskflow.service;public class TagService {
+package com.taskflow.service;
+
+public class TagService {
 }
