@@ -16,8 +16,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -59,10 +61,17 @@ public class Task {
     @ManyToOne
     private User user;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Tag> tags;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "task_tags",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags ;
 
-
+    public List<String> getTagTitles() {
+        return tags.stream().map(Tag::getTitle).collect(Collectors.toList());
+    }
 
 
     @CreationTimestamp
