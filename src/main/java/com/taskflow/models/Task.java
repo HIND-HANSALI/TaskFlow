@@ -41,7 +41,6 @@ public class Task {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Creation date is required")
     @FutureOrPresent(message = "Creation date must be in the present or the future")
-
     private LocalDate startDate;
 
     @NotNull(message = "Date cannot be null")
@@ -61,18 +60,11 @@ public class Task {
     @ManyToOne
     private User user;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "task_tags",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
+    @ManyToMany
     private List<Tag> tags ;
 
-    public List<String> getTagTitles() {
-        return tags.stream().map(Tag::getTitle).collect(Collectors.toList());
-    }
-
+//    @OneToOne
+//    private TaskChangeRequest taskChangeRequest;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

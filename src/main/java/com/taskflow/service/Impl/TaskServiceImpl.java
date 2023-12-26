@@ -33,6 +33,11 @@ public class TaskServiceImpl implements TaskService {
     public Task getTaskById(Long Id) {
         return null;
     }
+git
+    @Override
+    public Task createTask(Task task) {
+        return taskRepository.save(task);
+    }
 
     @Override
     public Task saveTask(Task task){
@@ -44,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
 //            List<Tag> savedTags = tagRepository.saveAll(task.getTags());
 //            task.setTags(savedTags);
 //        }
-        validateTags(task);
+//        validateTags(task);
         return taskRepository.save(task);
     }
     private void validateTags(Task task) {
