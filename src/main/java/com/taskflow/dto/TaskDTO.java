@@ -6,22 +6,21 @@ import com.taskflow.enums.TaskStatus;
 import com.taskflow.models.Tag;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
-public class TaskRequestDTO {
+public class TaskDTO {
     @NotNull(message = "Title cannot be null")
     private String title;
 
@@ -30,10 +29,12 @@ public class TaskRequestDTO {
 
     @NotNull(message = "Start date cannot be null")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent(message = "Start date must be in the present or future")
     private LocalDate startDate;
 
     @NotNull(message = "End date cannot be null")
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent(message = "End date must be in the present or future")
     private LocalDate endDate;
 
 //    @NotNull(message = "Completed status is required")
@@ -43,10 +44,16 @@ public class TaskRequestDTO {
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
 
-    @Enumerated(EnumType.STRING)
-    private TaskAction taskAction;
+    @NotNull(message = "Created by user ID is required")
+    private Long createdByUserId;
 
-    @NotEmpty(message = "Tag is required")
-    @Size(min = 3, message = "At least three tags are required")
-    private List<Tag> tags;
+    @NotNull(message = "Assigned to user ID is required")
+    private Long assignedToUserId;
+
+    @NotEmpty(message = "At least one tag is required")
+    private List<Long> tagIds;
+
+//    @NotEmpty(message = "Tag is required")
+//    @Size(min = 3, message = "At least three tags are required")
+//    private List<Tag> tags;
 }

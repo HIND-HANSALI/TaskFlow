@@ -1,11 +1,9 @@
 package com.taskflow.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.taskflow.enums.TaskAction;
 import com.taskflow.enums.TaskStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,10 +14,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -40,7 +36,7 @@ public class Task {
     @NotNull(message = "Date cannot be null")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Creation date is required")
-    @FutureOrPresent(message = "Creation date must be in the present or the future")
+//    @FutureOrPresent(message = "Creation date must be in the present or the future")
     private LocalDate startDate;
 
     @NotNull(message = "Date cannot be null")
@@ -50,18 +46,30 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
 
-    @Enumerated(EnumType.STRING)
-    private TaskAction taskAction;
+//    @Enumerated(EnumType.STRING)
+//    private TaskAction taskAction;
 
     @Builder.Default
     private boolean isPassed= false;
 
-    @JsonBackReference
     @ManyToOne
-    private User user;
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
+    @ManyToOne
+    @JoinColumn(name = "assigned_to_id")
+    private User assignedTo;
 
     @ManyToMany
     private List<Tag> tags ;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskChange> taskChanges;
+
+
+//    @JsonBackReference
+//    @ManyToOne
+//    private User user;
+
 
 //    @OneToOne
 //    private TaskChangeRequest taskChangeRequest;
