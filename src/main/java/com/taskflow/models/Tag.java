@@ -20,7 +20,7 @@ public class Tag {
     private Long id;
 
     @Column(unique = true)
-    private String title;
+    private String name;
 
     @ManyToMany(mappedBy = "tags")
     private List<Task> tasks;
