@@ -1,2 +1,9 @@
-package com.taskflow.enums;public enum StatusRequest {
+package com.taskflow.enums;
+
+public enum StatusRequest {
+    PENDING,
+    ACCEPTED,
+    REJECTED,
+    CHANGED
+
 }
