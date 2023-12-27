@@ -1,8 +1,8 @@
 package com.taskflow.controller;
 
-import com.taskflow.dto.TaskDto;
 import com.taskflow.handlers.response.ResponseMessage;
 import com.taskflow.models.User;
+import com.taskflow.models.Userdetails;
 import com.taskflow.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +29,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity addUser(@Valid @RequestBody User user) {
-        User userSaved = userService.saveUser(user);
+    public ResponseEntity addUser(@Valid @RequestBody Userdetails user) {
+        Userdetails userSaved = userService.saveUser(user);
 
 
         if(userSaved  == null) {
