@@ -7,12 +7,12 @@ import com.taskflow.models.Task;
 import java.util.List;
 
 public interface TaskService  {
-
-//    Task createTask(Task task);
     TaskResponseDTO createTask(TaskDTO taskDTO);
+    void updateTaskStatusDone(Long taskId);
+//    List<Task> getAllTasks();
 
     List<TaskResponseDTO> getAllTasks();
     TaskResponseDTO getTaskById(Long Id);
-    Task saveTask(Task task);
+
 
 }

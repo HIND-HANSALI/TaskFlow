@@ -138,19 +138,29 @@ public class TaskServiceImpl implements TaskService {
 
 
 
-    @Override
-    public Task saveTask(Task task){
-//        validateTask(task);
 
-        // Check if the tags are not null and not yet saved
-//        if (task.getTags() != null && !task.getTags().isEmpty() && task.getTags().get(0).getId() == null) {
-//            // Save the tags first
-//            List<Tag> savedTags = tagRepository.saveAll(task.getTags());
-//            task.setTags(savedTags);
-//        }
-//        validateTags(task);
-        return taskRepository.save(task);
+    @Override
+    @Transactional
+    public void updateTaskStatusDone(Long taskId) {
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
+
+        if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+
+            if (task.getEndDate().isBefore(LocalDate.now())) {
+                throw new ValidationException("Task cannot be marked as DONE after the end date has passed.");
+            }
+
+            if (task.getTaskStatus() == TaskStatus.Done|| task.getTaskStatus() == TaskStatus. Uncompleted) {
+                throw new ValidationException("Task is already marked as DONE or is UNCOMPLETED.");
+            }
+
+            taskRepository.updateTaskStatusToDone(taskId, LocalDate.now());
+        } else {
+            throw new ValidationException("Task not found with ID: " + taskId);
+        }
     }
+
 
 
 

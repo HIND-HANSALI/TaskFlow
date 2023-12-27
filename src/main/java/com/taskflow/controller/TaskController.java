@@ -58,6 +58,13 @@ public class TaskController {
         }
 
     }
+    @PutMapping("/{taskId}/statutDone")
+    public ResponseEntity<String> updateTaskStatusDone(@PathVariable Long taskId) {
+
+        taskService.updateTaskStatusDone(taskId);
+        return ResponseEntity.ok("Task status has been updated to Done");
+    }
+
 
 
 
