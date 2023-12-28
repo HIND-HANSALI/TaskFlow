@@ -65,10 +65,11 @@ public class TaskController {
         return ResponseEntity.ok("Task status has been updated to Done");
     }
 
+    @DeleteMapping("/{taskId}/{userId}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long taskId, @PathVariable Long userId) {
+        taskService.deleteTask(taskId, userId);
+        return ResponseMessage.ok(null,"Task deleted successfully");
 
-
-
-
-
+    }
 
 }

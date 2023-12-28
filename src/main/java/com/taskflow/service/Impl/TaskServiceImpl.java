@@ -134,11 +134,6 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
     }
 
-
-
-
-
-
     @Override
     @Transactional
     public void updateTaskStatusDone(Long taskId) {
@@ -161,7 +156,30 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+    public void deleteTask(Long taskId, Long userId) {
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
+        if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+            User user = getUserById(userId);
 
+            // Check if the user is a manager or the creator of the task
+            boolean isManagerOrCreator = user.getRole() == Role.Manager || task.getCreatedBy().equals(user);
+
+            if (isManagerOrCreator) {
+                boolean hasChangedTokenTask = taskChangeRepository.existsByTaskAndStatus(task, StatusRequest.CHANGED);
+
+                if (hasChangedTokenTask ) {
+                    throw new ValidationException("Cannot delete the task because it has already status CHANGED.");
+                }
+
+                taskRepository.deleteById(taskId);
+            } else {
+                throw new ValidationException("User does not have permission to delete this task. not Owner or Admin");
+            }
+        } else {
+            throw new ValidationException("Task not found with ID: " + taskId);
+        }
+    }
 
 
 //    private void taskCannotCreateInThePast(Task task) {
